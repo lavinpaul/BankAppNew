@@ -5,6 +5,7 @@ import com.bank.account.dto.TransferRequestDto;
 import com.bank.account.dto.WithdrawRequestDto;
 import com.bank.account.entity.Account;
 import com.bank.account.service.AccountService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,21 +27,21 @@ public class AccountController {
 
     @PostMapping("/deposit")
     public String deposit(
-            @RequestBody DepositRequestDto dto) {
+            @Valid @RequestBody DepositRequestDto dto) {
 
         return accountService.deposit(dto);
     }
 
     @PostMapping("/withdraw")
     public String withdraw(
-            @RequestBody WithdrawRequestDto dto) {
+            @Valid @RequestBody WithdrawRequestDto dto) {
 
         return accountService.withdraw(dto);
     }
 
     @PostMapping("/transfer")
     public String transfer(
-            @RequestBody TransferRequestDto dto) {
+            @Valid @RequestBody TransferRequestDto dto) {
 
         return accountService.transfer(dto);
     }
