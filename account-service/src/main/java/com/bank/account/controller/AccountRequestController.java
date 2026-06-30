@@ -3,6 +3,7 @@ package com.bank.account.controller;
 import com.bank.account.dto.CreateAccountRequestDto;
 import com.bank.account.entity.AccountRequest;
 import com.bank.account.service.AccountRequestService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class AccountRequestController {
 
     @PostMapping
     public AccountRequest createRequest(
-            @RequestBody CreateAccountRequestDto dto) {
+           @Valid @RequestBody CreateAccountRequestDto dto) {
 
         return service.createRequest(dto);
     }
