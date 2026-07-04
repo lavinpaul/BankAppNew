@@ -1,11 +1,14 @@
 package com.bank.auth.service;
 
+import com.bank.auth.dto.LoginRequest;
 import com.bank.auth.dto.RegisterRequest;
 import com.bank.auth.entity.Role;
 import com.bank.auth.entity.User;
 import com.bank.auth.repository.UserRepository;
 import com.bank.auth.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
 
     public String register(RegisterRequest request) {
 
@@ -37,21 +41,15 @@ public class AuthService {
         return "User Registered Successfully";
     }
 
-    public String login(String username, String password) {
+    public String login(LoginRequest request) {
 
-        User user = userRepository
-                .findByUsername(username)
-                .orElseThrow(
-                        () -> new RuntimeException("User not found")
-                );
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getUsername(),
+                        request.getPassword()
+                )
+        );
 
-        if (!passwordEncoder.matches(
-                password,
-                user.getPassword())) {
-
-            throw new RuntimeException("Invalid Credentials");
-        }
-
-        return jwtUtil.generateToken(username);
+        return jwtUtil.generateToken(request.getUsername());
     }
 }

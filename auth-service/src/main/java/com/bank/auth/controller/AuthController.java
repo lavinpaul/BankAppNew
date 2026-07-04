@@ -6,6 +6,8 @@ import com.bank.auth.dto.RegisterRequest;
 import com.bank.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/auth")
@@ -25,11 +27,14 @@ public class AuthController {
     public AuthResponse login(
             @RequestBody LoginRequest request) {
 
-        String token =
-                authService.login(
-                        request.getUsername(),
-                        request.getPassword());
+        String token = authService.login(request);
 
         return new AuthResponse(token);
+    }
+
+    @GetMapping("/me")
+    public String me(Authentication authentication) {
+
+        return authentication.getName();
     }
 }
